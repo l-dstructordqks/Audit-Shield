@@ -24,3 +24,5 @@ class ScanResult(BaseModel):
     audit_level: str          # 'GREEN' | 'YELLOW' | 'RED'
     breakdown: dict           
 
+class TextScanRequest(BaseModel):
+    content: str
