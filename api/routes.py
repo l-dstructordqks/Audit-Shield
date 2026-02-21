@@ -55,8 +55,8 @@ async def scan_from_text(body: TextScanRequest) -> ScanResult:
 
 
 @router.get('/package/{package_name}')
-async def get_package_detail(package_name: str) -> PackageResult:
+async def get_package_detail(package_name: str, version: str | None = None) -> PackageResult:
 
-    dependency = {'name': package_name, 'version': None}
+    dependency = {'name': package_name, 'version': version}
     return _build_package_result(dependency)
     
