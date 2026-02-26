@@ -1,9 +1,18 @@
 // src/utils/colors.ts
-const colors = {
-    GREEN: '#2D9B2B',
-    YELLOW: '#FFD700',
-    RED: '#B81D13'
+const colors: Record<string, string> = {
+    GREEN: '#28A745',
+    YELLOW: '#FFC107',
+    RED: '#DC3545',
+    UNKNOWN: '#6C757D',
 }
+const SEVERITY_COLORS: Record<string, string> = {
+    CRITICAL: "#B00020",
+    HIGH:     "#FD7E14",
+    MEDIUM:   "#FFE100",
+    LOW:      "#17A2B8",
+    UNKNOWN: '#ADB5BD',
+};
+
 export const getColorFromNumber = (score: number|undefined): string => {
     if (score >= 70) {
         return colors.RED;
@@ -24,6 +33,17 @@ export const getColor = (level: string): string => {
         default: return '#7F8C8D'; // UNKNOWN
     }
 };
+
+export const getColorFromSeverity = (severity: string): string => {
+    switch (severity.toUpperCase()) {
+        case 'CRITICAL': return SEVERITY_COLORS.CRITICAL;
+        case 'HIGH': return SEVERITY_COLORS.HIGH;
+        case 'MEDIUM': return SEVERITY_COLORS.MEDIUM;
+        case 'LOW': return SEVERITY_COLORS.LOW;
+        default: return '#7F8C8D'; // UNKNOWN
+    }
+};
+
 
 
 export const getRiskFromLevel = (level: string): string => {

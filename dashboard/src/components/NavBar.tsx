@@ -57,7 +57,7 @@ export const NavBar: React.FC<FilterProps> = ({ onSearch, filters, setFilters })
             </button>
 
             {isOpen && (
-              <div className='absolute text-black top-full right-0 border-solid flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm text-sm font-bold'>
+              <div className='absolute text-gray-900 top-full right-0 border-solid flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm text-sm font-bold'>
                 {COLORS.map((c) => (
                 <button
                     className='hover:bg-gray-100'

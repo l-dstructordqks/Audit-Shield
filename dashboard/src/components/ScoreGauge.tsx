@@ -40,7 +40,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
                             y="52%"
                             textAnchor="middle"
                             dominantBaseline="middle"
-                            className="font-bold text-2xl pt-2"
+                            className="font-bold font-ptsans text-2xl pt-2"
                             fill={getColor(level)}
                         >
                             {score}%
@@ -50,7 +50,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
             </div>
             
             <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-400">
+                <h3 className="font-semibold text-sm tracking-[0.08em] uppercase px-2 font-ptsans text-gray-900">
                     Risk Level: <span style={{ color: getColor(level) }}>{getRiskFromLevel(level)}</span>
                 </h3>
                 <BreakdownBadges breakdown={breakdown} />
