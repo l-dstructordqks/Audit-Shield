@@ -52,41 +52,40 @@ def calculate_baseline(df: pd.DataFrame) -> dict:
         'bytes_mean': df['bytes'].mean(),
         'bytes_std': df['bytes'].std(),
         'events_per_min': round(events_per_min, 2),
+        # latency_threshold outlier value, that mathces te 68-95-99.7, unusual events
+        # bytes_threshold alerts about Exfiltración de datos, Streaming o Descargas, Ataque DDoS (saturación de red) Error de Aplicación (un bucle infinito)
+        'latency_threshold': df['latency_ms'].mean() + 2 * df['latency_ms'].std(),
+        'bytes_threshold': df['bytes'].mean() * 10,
     }
 
 def detect_anomalies(df: pd.DataFrame, baseline: dict) -> list[dict]:
 
     anomalies = []
 
-    # latency_threshold outlier value, that mathces te 68-95-99.7, unusual events
-    latency_threshold = baseline['latency_mean'] + 2 * baseline['latency_std']
-    # bytes_threshold alerts about Exfiltración de datos, Streaming o Descargas, Ataque DDoS (saturación de red) Error de Aplicación (un bucle infinito)
-    bytes_threshold   = baseline['bytes_mean'] * 10
-
     # iterrows(){allows analysis rows by rows te dataframe}
     # row stores all values of each row
     # iterrow returns a index and the row, with (_) store te index row and ignores
     for _, row in df.iterrows():
         # find what row as a latency value hihger than our latency threshold
-        if row['latency_ms'] > latency_threshold:
+        if row['latency_ms'] > baseline['latency_threshold']:
             anomalies.append({
                 'timestamp': str(row['timestamp']),
                 'type': 'HIGH_LATENCY',
                 'value': round(row['latency_ms'], 2),
-                'threshold': round(latency_threshold, 2),
+                'threshold': round(baseline['latency_threshold'], 2),
             })
         # find what row as a bytes value hihger than our bytes threshold
-        if row['bytes'] > bytes_threshold:
+        if row['bytes'] > baseline['bytes_threshold']:
             anomalies.append({
                 'timestamp': str(row['timestamp']),
                 'type': 'HIGH_BYTES',
                 'value': int(row['bytes']),
-                'threshold': round(bytes_threshold, 2),
+                'threshold': round(baseline['bytes_threshold'], 2),
             })
 
     return anomalies
 
-def get_timeseries(df: pd.DataFrame, interval: str = '1min') -> list[dict]:
+def get_timeseries(df: pd.DataFrame, baseline: dict, interval: str = '1min') -> list[dict]:
 # orups te traffic in time interval, returns [{timestamp, avg_latency, total_bytes, baseline_latency}] to draw two curves of te diital twin
 
     # converts timestamp in te index colunm
@@ -95,20 +94,26 @@ def get_timeseries(df: pd.DataFrame, interval: str = '1min') -> list[dict]:
     grouped = df.resample(interval).agg( # defines actions to take wit te rouped values
         
         avg_latency=('latency_ms', 'mean'), # takes all latencies occurs in a minute and calculates te latency mean
+        max_latency=('latency_ms', 'max'),
         total_bytes=('bytes', 'sum'), # Sums all bytes in te 1 minute interval
+        max_bytes=('bytes', 'max'),
         event_count=('bytes', 'count'), # counts te events occurs in 1 minute
+        latency_anomaly_count = ('latency_ms', lambda x: (x > baseline['latency_threshold']).sum()),
+        bytes_anomaly_count = ('bytes', lambda x: (x > baseline['bytes_threshold']).sum()),
     ).dropna() # eliminates allrows witout data or wit Nan data
 
     # baseline_latency es la media global — la línea de referencia del gemelo digital
-    baseline_latency = df['latency_ms'].mean()
 
     return [
         {
             'timestamp': str(ts),
             'avg_latency': round(row['avg_latency'], 2),
+            'max_latency': round(row['max_latency'], 2),
             'total_bytes': int(row['total_bytes']),
+            'max_bytes': int(row['max_bytes']),
             'event_count': int(row['event_count']),
-            'baseline_latency': round(baseline_latency, 2),
+            'latency_anomaly_count': int(row['latency_anomaly_count']),
+            'bytes_anomaly_count':   int(row['bytes_anomaly_count']),
         }
         for ts, row in grouped.iterrows()
     ]

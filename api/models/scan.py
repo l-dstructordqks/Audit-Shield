@@ -38,9 +38,12 @@ class AnomalyEvent(BaseModel):
 class TimePoint(BaseModel):
     timestamp: str
     avg_latency: float
+    max_latency: float
     total_bytes: int
+    max_bytes: int
     event_count: int
-    baseline_latency: float
+    latency_anomaly_count: int
+    bytes_anomaly_count: int
 
 class EndpointSummary(BaseModel):
     ip: str
@@ -54,6 +57,8 @@ class Baseline(BaseModel):
     bytes_mean: float
     bytes_std: float
     events_per_min: float
+    latency_threshold: float
+    bytes_threshold: float
 
 class TrafficAnalysisResult(BaseModel):
     baseline: Baseline

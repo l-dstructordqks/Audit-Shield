@@ -29,7 +29,7 @@ async def analyze_traffic(file: UploadFile) -> TrafficAnalysisResult:
     # 3. Ochest te analysis
     baseline = calculate_baseline(df)
     anomalies = detect_anomalies(df, baseline)
-    timeseries = get_timeseries(df)
+    timeseries = get_timeseries(df, baseline)
     endpoints = analyze_endpoints(df)
     risk_score = get_network_risk_score(anomalies, total=len(df))
 
