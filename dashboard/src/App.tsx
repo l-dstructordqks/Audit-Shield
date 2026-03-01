@@ -1,10 +1,10 @@
 import './App.css'
-import { TrafficTwinChart } from './components/TrafficTwinChart'
+import { EndpointSummaryTable } from './components/EndpointSummary'
 
 function App() {
   return (
     <>
-      <TrafficTwinChart/>
+      <EndpointSummaryTable/>
     </>
   )
 }
