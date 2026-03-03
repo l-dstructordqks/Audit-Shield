@@ -3,6 +3,7 @@ import React from 'react';
 import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
 import { getColor, getColorFromNumber, getRiskFromLevel } from '../utils/colors';
 import { BreakdownBadges } from './BreakdownBadges';
+import EducationalTooltip from './EducationalToolip';
 
 interface ScoreGaugeProps {
     score: number;
@@ -15,6 +16,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
 
     return (
         <div className="flex flex-col sm:flex-row items-center justify-center p-4 bg-white rounded-lg shadow">
+            <EducationalTooltip type="score" data={{ score: score, level: level, ...breakdown }}>
             <div style={{ width: '200px', height: '200px' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <RadialBarChart 
@@ -55,6 +57,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
                 </h3>
                 <BreakdownBadges breakdown={breakdown} />
             </div>
+            </EducationalTooltip>
         </div>
     );
 };

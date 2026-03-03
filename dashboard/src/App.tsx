@@ -1,12 +1,19 @@
+import { Route, Routes } from 'react-router'
 import './App.css'
+import { HomePage } from './components/pages/Homepage'
+import { PackagesContainer } from './components/PackagesContainer'
 
 function App() {
   
   
   return (
-    <>
-      
-    </>
+    <div className='bg-gray-50'>
+      <Routes>
+        <Route path='/' element={<HomePage/>} />
+        <Route path='/RequirementsAnalysis' element={<PackagesContainer/>} />
+        <Route path='/note/:id' />
+      </Routes>
+    </div>
   )
 }
 

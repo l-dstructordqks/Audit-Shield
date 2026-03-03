@@ -15,6 +15,18 @@ def _build_package_result(dependency: dict) -> dict:
 
     vulns = fetch_vulnerabilities(name, version)
     info = get_package_info(name)
+    if not info:
+        return {
+            "name": name,
+            "current_version": version,
+            "latest_version": None,
+            "days_since_update": 0,
+            "is_outdated": False,
+            "vulnerabilities": [],
+            "risk_level": "unknown",
+            "action": "Package not found",
+        }
+
     outdated = is_outdated(version, info['latest_version'])
     vuln_score = _score_vulns(vulns)
 
@@ -71,7 +83,7 @@ async def scan_requirements(file: UploadFile) -> ScanResult:
 
 @router.post('/scan/text')
 async def scan_from_text(body: TextScanRequest) -> ScanResult:
-
+    print('lallalala')
     return _build_scan_result(body.content)
 
 

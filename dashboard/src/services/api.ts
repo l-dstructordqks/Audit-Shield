@@ -2,9 +2,9 @@ import axios from 'axios'
 import { type ScanResult, type PackageResult, type TextScanRequest, type TrafficResult } from '../types';
 
 // devleopment and production enviroment from .env file
-const BASE_URL: string = import.meta.env.MODE === "development" 
-    ? "http://localhost:8000/api/v1" 
-    : import.meta.env.VITE_API_URL;
+const BASE_URL: string = import.meta.env.MODE === "production" 
+    ? import.meta.env.VITE_API_URL 
+    : "http://localhost:8000/api/v1";
 
 const api = axios.create({
     baseURL: BASE_URL,

@@ -1,45 +1,17 @@
 import React, { useMemo, useState } from 'react'
-import type { PackageResult } from '../types';
 import type { Filters } from '../types/filter';
 import { PackagesTable } from './PackagesTable';
 import { NavBar } from './NavBar';
+import { useLocation } from 'react-router';
+import RiskDistributionChart from './RiskDistributionChart';
+import { ScoreGauge } from './ScoreGauge';
 
-const test_data: PackageResult[] = [
-    {
-      name: "lodash",
-      days_since_update: 10,
-      is_outdated: false,
-      vulnerabilities: [],
-      risk_level: 'GREEN',
-      action: 'not required'
-    },
-    {
-      name: "podash",
-      days_since_update: 10,
-      is_outdated: true,
-      vulnerabilities: [],
-      risk_level: 'GREEN',
-      action: 'update fds dfsdf fs  s'
-    },
-    {
-      name: "podash",
-      days_since_update: 10,
-      is_outdated: true,
-      vulnerabilities: [],
-      risk_level: 'YELLOW',
-      action: 'update fds dfsdf fs  s'
-    },
-    {
-      name: "podash",
-      days_since_update: 10,
-      is_outdated: false,
-      vulnerabilities: [],
-      risk_level: 'RED',
-      action: 'not required'
-    }
-];
+
 
 export const PackagesContainer: React.FC = () => {
+
+  const location = useLocation();
+  const { data } = location.state || {};
 
     const [filters, setFilters] = useState<Filters>({
         colors: [],
@@ -48,7 +20,7 @@ export const PackagesContainer: React.FC = () => {
     });
 
     const filteredData = useMemo(() => {
-        return test_data.filter((item) => {
+        return data.packages.filter((item) => {
           const colorMatch =
             filters.colors.length === 0 ||
             filters.colors.includes(item.risk_level);
@@ -62,13 +34,16 @@ export const PackagesContainer: React.FC = () => {
     
           return colorMatch && outdatedMatch && actionMatch;
         });
-      }, [filters]);
+      }, [filters, data.packages]);
+
       const [query, setQuery] = useState("");
 
   return (
     <div className='flex flex-col gap-2'>
+        <RiskDistributionChart packages={filteredData}/>
         <NavBar onSearch={setQuery} filters={filters} setFilters={setFilters}/>
         <PackagesTable query={query} packages={filteredData}/>
+        <ScoreGauge score={data.audit_score} level={data.audit_level} breakdown={data.breakdown} />
     </div>
   )
 }

@@ -35,13 +35,21 @@ def calculate_audit_score(packages: list[dict], network_score: float = 0.0) -> d
     }
 
 
-def _score_vulns(vulnerabilities: list[dict]) -> float:
+def _score_vulns(vulnerabilities: list[dict]|None) -> float:
     total_score = 0
+    if not vulnerabilities:
+        return total_score
     for vuln in vulnerabilities:
         total_score += SEVERITY_WEIGHTS.get(vuln.get('severity'), 0)
     return total_score
 
-def _score_maintenance(days: int, is_outdated: bool) -> float:
+def _score_maintenance(days: int|None, is_outdated: bool|None) -> float:
+    if days is None:
+        days = 0
+
+    if is_outdated is None:
+        is_outdated = False
+
     score = 0
     if is_outdated:
         score += 10

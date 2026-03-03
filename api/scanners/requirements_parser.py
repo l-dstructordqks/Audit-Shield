@@ -18,7 +18,7 @@ def parse_requirements(content: str) -> list[dict]:
         }
         
         dependencies_list.append(dependency_dict)
-    print(dependencies_list)
+    return dependencies_list
 
 
 def _clean_line(line: str) -> str|None:
