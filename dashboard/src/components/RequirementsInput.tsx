@@ -47,7 +47,7 @@ const handleCsvChange = (e: ChangeEvent<HTMLInputElement>) => {
       } 
       if (mode === 'file') {
         if (txtFile && !csvFile) {
-          console.log("Solo TXT");
+          //console.log("Solo TXT");
           const packageResult = await scanFromFile(txtFile);
           navigate('/RequirementsAnalysis', {
             state: { data: packageResult }
@@ -55,23 +55,27 @@ const handleCsvChange = (e: ChangeEvent<HTMLInputElement>) => {
           //await scanOnlyTxt(txtFile);
         } 
         else if (!txtFile && csvFile) {
+          console.log("Solo CSV");
           const trafficResult = await analyzeTraffic(csvFile);
           navigate('/RequirementsAnalysis', {
             state: { data: trafficResult }
           });
-          console.log("Solo CSV");
+          //console.log("Solo CSV");
           //await scanOnlyCsv(csvFile);
         } 
         else if (txtFile && csvFile) {
+          console.log("Ambos archivos");
           const fullResult = await scanFull(txtFile, csvFile);
+          console.log(fullResult);
           navigate('/RequirementsAnalysis', {
             state: { data: fullResult }
           });
-          console.log("Ambos archivos");
+          
           //await scanBothFiles(txtFile, csvFile);
         } 
         else {
-          console.log("No se subió ningún archivo");
+          //console.log("No se subió ningún archivo");
+          navigate('/');
         }
       }
       //navigate('/');

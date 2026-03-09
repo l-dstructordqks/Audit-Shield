@@ -140,6 +140,13 @@ export const RiskDistributionChart = ({ packages }: RiskDistributionChartProps) 
     name.length > 12 ? name.slice(0, 11) + "…" : name;
 
   return (
+    <>
+    <h2
+      className="text-lg font-ptsans font-semibold tracking-[0.05em] text-gray-500 leading-none mt-3 mb-1 pl-3 text-left"
+      
+    >
+      Vulnerability Severity by Package <span className="text-red-500"></span>
+    </h2>
     <div className="bg-white rounded-lg shadow font-ptsans" style={{
       padding: "24px 16px 16px",
     }}>
@@ -191,6 +198,7 @@ export const RiskDistributionChart = ({ packages }: RiskDistributionChartProps) 
 
       <CustomLegend />
     </div>
+    </>
   );
 };
 

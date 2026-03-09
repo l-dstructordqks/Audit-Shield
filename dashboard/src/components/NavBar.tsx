@@ -39,6 +39,13 @@ export const NavBar: React.FC<FilterProps> = ({ onSearch, filters, setFilters })
     const [isOpen, setIsOpen] = useState(false);
   
   return (
+    <>
+    <h2
+      className="text-lg font-ptsans font-semibold tracking-[0.05em] text-gray-500 leading-none mt-3 mb-1 pl-3 text-left"
+      
+    >
+      Package Vulnerabilities <span className="text-red-500"></span>
+    </h2>
     <div className='bg-white border border-gray-200 rounded-lg shadow-sm'>
       <div className='flex flex-col'>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -109,6 +116,6 @@ export const NavBar: React.FC<FilterProps> = ({ onSearch, filters, setFilters })
         </div>
       </div>
     </div>
-
+    </>
   )
 }

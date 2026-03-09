@@ -50,6 +50,7 @@ export interface TimePoint {
     bytes_anomaly_count: number;
 }
 export interface EndpointSummary {
+    timestamp: string;
     ip: string;
     protocol: string;
     total_bytes: number;
@@ -72,4 +73,18 @@ export interface TrafficAnalysisResult{
     endpoints: EndpointSummary[];
     network_risk_score: number;      // el N del Audit-Score
     total_events: number;
+}
+
+export interface ScanFullResult {
+    packages: PackageResult[];
+    audit_score: number;        // 0-100
+    audit_level: 'GREEN' | 'YELLOW' | 'RED';          // 'GREEN' | 'YELLOW' | 'RED'
+    breakdown: Record<string, number>;
+    baseline: Baseline;
+    anomalies: AnomalyEvent[];
+    timeseries: TimePoint[];
+    endpoints: EndpointSummary[];
+    network_risk_score: number;      // el N del Audit-Score
+    total_events: number;
+
 }

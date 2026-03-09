@@ -15,6 +15,14 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
     const data = [{ name: 'V', value: breakdown.V, fill: getColorFromNumber(breakdown.V) }, { name: 'M', value: breakdown.M, fill: getColorFromNumber(breakdown.M) }, { name: 'N', value: breakdown.N, fill: getColorFromNumber(breakdown.N) }];
 
     return (
+        <>
+        <h2
+            className="text-lg font-ptsans font-semibold tracking-[0.05em] text-gray-500 leading-none mt-3 mb-1 pl-3 text-left"
+        
+        >
+        Audit Shield Score <span className="text-red-500"></span>
+        </h2>
+        
         <div className="flex flex-col sm:flex-row items-center justify-center p-4 bg-white rounded-lg shadow">
             <EducationalTooltip type="score" data={{ score: score, level: level, ...breakdown }}>
             <div style={{ width: '200px', height: '200px' }}>
@@ -59,5 +67,6 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score, level, breakdown 
             </div>
             </EducationalTooltip>
         </div>
+        </>
     );
 };

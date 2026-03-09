@@ -178,13 +178,15 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label, t
     // Buscamos el valor del threshold en los datos del punto actual
     const thresholdValue = payload.find(p => p.dataKey === thresholdKey)?.value || 0;
     
-    // Formatear la fecha (asumiendo ISO string)
+    /* Formatear la fecha (asumiendo ISO string)
     const formattedDate = new Date(label || "").toLocaleTimeString([], { 
       hour: '2-digit', 
       minute: '2-digit' ,
       hour12: false,
-    timeZone: 'UTC'
-    });
+      timeZone: 'UTC'
+    });*/
+    const formattedDate = label && label.split(' ')[1].slice(0, 5); 
+    //console.log(formattedDate);
 
     return (
       <div className="bg-white/95 backdrop-blur-sm border border-gray-200 shadow-xl rounded-lg p-3 font-ptsans min-w-[160px]">
@@ -305,6 +307,13 @@ export const TrafficTwinChart: React.FC<TrafficTwinChartProps> = ({ baseline, ti
 
   
   return (
+  <>
+    <h2
+      className="text-lg font-ptsans font-semibold tracking-[0.05em] text-gray-500 leading-none mt-3 mb-1 pl-3 text-left"
+      
+    >
+      Traffic Twin <span className="text-red-500"></span>
+    </h2>
   <div className="flex flex-col bg-white rounded-lg shadow font-ptsans min-w-150 px-4 pb-4 pt-6 h-full">
     <div className="flex justify-between font-ptsans text-gray-900 align-baseline mb-5 pl-2">
       <h3 className="font-semibold text-sm tracking-[0.08em] uppercasepx-2">
@@ -391,6 +400,7 @@ export const TrafficTwinChart: React.FC<TrafficTwinChartProps> = ({ baseline, ti
     </ResponsiveContainer>
     
   </div>
+  </>
 );
 
 };

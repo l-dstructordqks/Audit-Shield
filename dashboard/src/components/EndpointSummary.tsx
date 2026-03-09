@@ -22,10 +22,19 @@ const endpointData: EndpointSummary[] = [
 export const EndpointSummaryTable: React.FC<EndpointSummaryProps> = ({ endpoints }) => {
 
   return (
-    <div className='flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-800'>
+    <>
+    <h2
+      className="text-lg font-ptsans font-semibold tracking-[0.05em] text-gray-500 leading-none mt-3 mb-1 pl-3 text-left"
+      
+    >
+      Endpoint Connection Logs <span className="text-red-500"></span>
+    </h2>
+    
+    <div className='flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-800 justify-center'>
       <table className='table-auto border border-gray-500 rounded-lg border-separate border-spacing-0'>
         <thead className='font-light'>
           <tr className='text-base' >
+            <th className='font-medium border-r border-gray-400 px-4 py-2'>Timestamp</th>
             <th className='font-medium border-r border-gray-400 px-4 py-2'>Ip</th>
             <th className='font-medium border-r border-gray-400 px-4 py-2'>Protocol</th>
             <th className='font-medium border-r border-gray-400 px-4 py-2'>Total Bytes</th>
@@ -34,9 +43,12 @@ export const EndpointSummaryTable: React.FC<EndpointSummaryProps> = ({ endpoints
           </tr>
         </thead>
         <tbody>
-          {endpoints.map((e) => {
+          {endpoints.map((e, index) => {
+            
+            const formattedDate = e.timestamp && e.timestamp.split(' ')[1].slice(0, 12); 
             return (
-            <tr className='text-sm border-b'>
+            <tr key={index} className='text-sm border-b'>
+              <td className='px-2 py-1.5 border-t border-gray-400'>{formattedDate}</td>
               <td className='px-2 py-1.5 border-t border-gray-400'>{e.ip}</td>
               <td className='px-2 py-1.5 border-t border-gray-400'>{e.protocol}</td>
               <td className='px-2 py-1.5 border-t border-gray-400'>{e.total_bytes}</td>
@@ -67,5 +79,6 @@ export const EndpointSummaryTable: React.FC<EndpointSummaryProps> = ({ endpoints
         </tbody>
       </table>
     </div>
+    </>
   )
 }
