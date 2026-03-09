@@ -62,12 +62,9 @@ npm run dev
 curl -X POST http://localhost:8000/api/v1/scan/text \
   -H "Content-Type: application/json" \
   -d '{"content": "requests==2.25.0\ndjango==3.2.0\nnumpy==1.21.0"}'
-
-# Generate and analyze example traffic
-python examples/generate_traffic.py
-curl -X POST http://localhost:8000/api/v1/network/analyze \
-  -F "file=@dashboard/mock_data/traffic_sample.csv"
 ```
+
+You can also scan the files stored in the examples/ folder. There, you will find requirements_example.txt, traffic_capture.csv, and a real_data.py script. This script allows you to transform network traffic captured with Wireshark into the specific CSV format required by Audit-Shield. You can then upload both files to the UI for testing.
 
 ---
 
@@ -91,16 +88,26 @@ audit-shield/
 │
 ├── dashboard/                       # React + Vite
 │   └── src/components/
-│       ├── ScoreGauge.tsx
-│       ├── DependencyTable.tsx
-│       ├── RiskDistributionChart.tsx
-│       ├── TrafficTwinChart.tsx
+|       ├── pages/
+|       |   └── HomePage.py
+│       ├── ActionButton.tsx
+│       ├── AuditShieldHeader.tsx
+│       ├── BreakdownBadges.tsx
+│       ├── EducationalTooltip.tsx
 │       ├── EndpointSummary.tsx
-│       └── EducationalTooltip.tsx
+│       ├── NavBar.tsx
+│       ├── PackageContainer.tsx
+│       ├── PackagesTable.tsx
+│       ├── Pill.tsx
+│       ├── RequierementsInput.tsx
+│       ├── RiskDistributionChart.tsx
+│       ├── ScoreGauge.tsx
+│       └── TrafficTwinChart.tsx
 │
 ├── examples/
-│   ├── requirements.txt             # Example project for analysis
-│   └── generate_traffic.py          # Simulated traffic generator
+│   ├── requirements_example.txt    # Example project for analysis
+│   ├── traffic_capture.csv         # Simulated traffic file
+|   └── real_data.py                # Converts Wireshark traffic to the required CSV format
 │
 └── docs/
     └── EDUCATIONAL.md               # Educational guide
