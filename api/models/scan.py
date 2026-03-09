@@ -69,3 +69,15 @@ class TrafficAnalysisResult(BaseModel):
     endpoints: list[EndpointSummary]
     network_risk_score: float      # el N del Audit-Score
     total_events: int
+
+class ScanFullResult(BaseModel):
+    packages: list[PackageResult]
+    audit_score: int          # 0-100
+    audit_level: str          # 'GREEN' | 'YELLOW' | 'RED'
+    breakdown: dict   
+    baseline: Baseline
+    anomalies: list[AnomalyEvent]
+    timeseries: list[TimePoint]
+    endpoints: list[EndpointSummary]
+    network_risk_score: float      # el N del Audit-Score
+    total_events: int

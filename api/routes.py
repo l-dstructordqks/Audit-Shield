@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, UploadFile, status
-from api.models.scan import ScanResult, PackageResult, TextScanRequest
+from api.models.scan import ScanFullResult, ScanResult, PackageResult, TextScanRequest
 from api.scanners.requirements_parser import parse_requirements
 from api.scanners.osv_client import fetch_vulnerabilities
 from api.scanners.pypi_client import get_package_info, is_outdated
 from core_logic.scoring import _score_vulns, build_action_message, calculate_audit_score, score_to_level
-from api.scanners.net_analyzer import calculate_baseline, detect_anomalies, get_network_risk_score, load_traffic_csv
+from api.scanners.net_analyzer import analyze_endpoints, calculate_baseline, detect_anomalies, get_network_risk_score, get_timeseries, load_traffic_csv
 
 router = APIRouter(prefix='/api/v1', tags=['Packages'])
 
@@ -41,7 +41,7 @@ def _build_package_result(dependency: dict) -> dict:
         'action': build_action_message(name, info['latest_version']) if outdated else 'No update required',
     }
 
-def _build_scan_result( content: str, traffic: str | None = None) -> ScanResult:
+def _build_scan_result( content: str, traffic: str | None = None) -> ScanFullResult | ScanResult:
 
     parsed   = parse_requirements(content)
     packages = [_build_package_result(dep) for dep in parsed]
@@ -53,7 +53,22 @@ def _build_scan_result( content: str, traffic: str | None = None) -> ScanResult:
             df = load_traffic_csv(traffic)
             baseline   = calculate_baseline(df)
             anomalies  = detect_anomalies(df, baseline)
+            timeseries = get_timeseries(df, baseline)
+            endpoints = analyze_endpoints(df)
             risk_score = get_network_risk_score(anomalies, total=len(df))
+            audit_result   = calculate_audit_score(packages, risk_score)
+            return {
+                'packages': packages,
+                'audit_score': audit_result['score'],
+                'audit_level': audit_result['level'],
+                'breakdown': audit_result['breakdown'],
+                'baseline': baseline,
+                'anomalies': anomalies,
+                'timeseries': timeseries,
+                'endpoints': endpoints,
+                'network_risk_score': risk_score,
+                'total_events': len(df),
+            }
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e))
 
@@ -83,7 +98,7 @@ async def scan_requirements(file: UploadFile) -> ScanResult:
 
 @router.post('/scan/text')
 async def scan_from_text(body: TextScanRequest) -> ScanResult:
-    print('lallalala')
+    
     return _build_scan_result(body.content)
 
 
@@ -97,7 +112,7 @@ async def get_package_detail(package_name: str) -> PackageResult:
 async def scan_full(
     requirements: UploadFile,
     traffic:      UploadFile,
-) -> ScanResult:
+) -> ScanFullResult:
     
     try:
         content = (await requirements.read()).decode()
